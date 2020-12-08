@@ -16,8 +16,16 @@ void setup() {
 		Serial.println("Load Error");
 	}
 
-	render.setTextColor(0x7b3d);
-	render.printf("%s", "フォントJK");
+	render.setTextColor(WHITE);
+	render.printf("Hello World\n");
+	render.seekCursor(0, 10);
+	render.setTextSize(30);
+	render.setTextColor(GREEN);
+	render.printf("完全なUnicodeサポート\n");
+	render.seekCursor(0, 10);
+	render.setTextSize(40);
+	render.setTextColor(ORANGE);
+	render.printf("こんにちは世界\n");
 }
 
 void loop() {

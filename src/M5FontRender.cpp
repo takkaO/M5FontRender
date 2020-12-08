@@ -60,6 +60,11 @@ void M5FontRender::setCursor(uint32_t posX, uint32_t posY) {
     _posY = posY;
 }
 
+void M5FontRender::seekCursor(int deltaX, int deltaY) {
+    _posX += deltaX;
+    _posY += deltaY;
+}
+
 void M5FontRender::enableAutoNewline(bool enable) {
     _auto_newline = enable;
 }
@@ -147,10 +152,19 @@ void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint
 
     while (n < len) {
         uint16_t uniCode = decodeUTF8((uint8_t *)string, &n, len - n);
+        
+        if (uniCode == 	0x000A || uniCode == 0x000D) {
+            // LF or CR
+            poX = 0;
+            if (uniCode == 0x000A) {
+                base_y += render->max_pixel_height;
+            }
+            continue;
+        }
+
         if (font_render_glyph(render, uniCode) != ESP_OK) {
             ESP_LOGE(TAG, "Font render faild.");
         }
-        Serial.println(poX + (render->bitmap_width / 2));
         if (_auto_newline == true && poX + (render->bitmap_width) > _width) {
             poX = 0;
             base_y += render->max_pixel_height;
@@ -159,4 +173,6 @@ void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint
         poX += render->advance;
         sumX += render->advance;
     }
+    _posX = poX;
+    _posY = base_y - render->max_pixel_height;
 }

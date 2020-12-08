@@ -23,6 +23,7 @@ public:
 	bool setTextSize(uint16_t size);
 	void setTextColor(uint16_t color);
 	void setCursor(uint32_t posX, uint32_t posY);
+	void seekCursor(int deltaX, int deltaY);
 	void enableAutoNewline(bool enable);
 	//void setDrawPixelFunc(function<void>(int32_t x, int32_t y, uint32_t color) _drawPixel);
 	void drawString(const char *string, int32_t poX, int32_t poY, uint16_t fg);
