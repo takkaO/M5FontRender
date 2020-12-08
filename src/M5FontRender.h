@@ -10,10 +10,12 @@
 #elif defined( ARDUINO_M5STACK_Core2 ) // M5Stack Core2
 	#include "M5Core2.h"
 #endif
+
 #include "font_render.h"
 
 class M5FontRender {
 public:
+	M5FontRender();
 	bool loadFont(const font_data_t *data, font_data_size_t size);
 	bool loadFont(const char *path);
 	bool setTextSize(uint16_t size);
@@ -27,7 +29,7 @@ public:
 protected:
 	font_face_t font_face;
 	font_render_t font_render;
-	const int font_cache_size = 256;
+	int font_cache_size;
 	uint16_t _font_color = 0xFFFF; // white
 	uint32_t _posX = 0;
 	uint32_t _posY = 0;

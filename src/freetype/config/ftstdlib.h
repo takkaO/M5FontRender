@@ -127,8 +127,19 @@
    *                       memory allocation
    *
    */
+  
 #include "sdkconfig.h"
-#if defined (ESP32) && defined (CONFIG_SPIRAM_SUPPORT)
+#if defined (ARDUINO_M5Stack_Core_ESP32)
+  #define ft_scalloc   calloc
+  #define ft_sfree     free
+  #define ft_smalloc   malloc
+  #define ft_srealloc  realloc
+#elif defined (ARDUINO_M5STACK_FIRE) || defined (ARDUINO_M5STACK_Core2)
+  #define ft_scalloc   ps_calloc
+  #define ft_sfree     free
+  #define ft_smalloc   ps_malloc
+  #define ft_srealloc  ps_realloc
+#elif defined (ESP32) && defined (CONFIG_SPIRAM_SUPPORT)
   #define ft_scalloc   ps_calloc
   #define ft_sfree     free
   #define ft_smalloc   ps_malloc

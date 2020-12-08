@@ -1,4 +1,8 @@
-#include "M5Core2.h"
+#if defined( ARDUINO_M5Stack_Core_ESP32 ) || defined( ARDUINO_M5STACK_FIRE )
+	#include "M5Stack.h"
+#elif defined( ARDUINO_M5STACK_Core2 ) // M5Stack Core2
+	#include "M5Core2.h"
+#endif
 #include "binaryttf.h"
 #include "M5FontRender.h" // Include after M5Stack.h / M5Core2.h
 

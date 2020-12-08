@@ -1,5 +1,15 @@
 #include "M5FontRender.h"
 
+M5FontRender::M5FontRender() {
+    #if defined (ARDUINO_M5Stack_Core_ESP32)
+        font_cache_size = 32;
+    #elif defined (ARDUINO_M5STACK_FIRE) || defined(ARDUINO_M5STACK_Core2)
+        font_cache_size = 256;
+    #else
+        font_cache_size = 64;
+    #endif
+}
+
 bool M5FontRender::loadFont(const font_data_t *data, font_data_size_t size) {
     // load from array
     if (font_face_init(&font_face, data, size) != ESP_OK) {
@@ -48,12 +58,11 @@ void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY) {
 }
 
 void M5FontRender::printf(const char* fmt, ...) {
-    uint16_t len;
     char str[256] = {0};
     va_list ap;
 
     va_start(ap, fmt);
-    len = vsnprintf(str, 256, fmt, ap);
+    vsnprintf(str, 256, fmt, ap);
     va_end(ap);
 
     drawString(str, _posX, _posY);
