@@ -35,9 +35,15 @@ bool M5FontRender::loadFont(const font_data_t *data, font_data_size_t size) {
 
 bool M5FontRender::loadFont(const char *path) {
     // load from SD
+    ffsupport_setffs(SD);
     if (font_face_init_fs(&_font_face, path) != ESP_OK) {
         return false;
     }
+
+    if (font_render_init(&_font_render, &_font_face, _font_size, _font_cache_size) != ESP_OK) {
+        return false;
+    }
+    
     return true;
 }
 

@@ -11,6 +11,7 @@
 	#include "M5Core2.h"
 #endif
 
+#include "ffsupport.h"
 #include "font_render.h"
 
 class M5FontRender {

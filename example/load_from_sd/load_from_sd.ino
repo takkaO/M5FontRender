@@ -3,17 +3,18 @@
 #elif defined( ARDUINO_M5STACK_Core2 ) // M5Stack Core2
 	#include "M5Core2.h"
 #endif
-#include "binaryttf.h"
 #include "M5FontRender.h" // Include after M5Stack.h / M5Core2.h
 
 M5FontRender render;
 
 void setup() {
+	// put your setup code here, to run once:
 	M5.begin();
 	M5.Lcd.fillScreen(BLACK);
-	// put your setup code here, to run once:
-	if (!render.loadFont(binaryttf, sizeof(binaryttf))) {
-		Serial.println("Load Error");
+	
+	if (!render.loadFont("/JKG-M_3.ttf")) {
+		Serial.println("Render initialize error");
+		return;
 	}
 
 	render.setTextColor(WHITE);
