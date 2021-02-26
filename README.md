@@ -1,6 +1,7 @@
 # M5 Font Render
 
-TTF font render support for M5Stack / M5Core2 with Arduino IDE.
+TTF font render support for M5Stack / M5Core2 with Arduino IDE.  
+This library can render TTF font files in the SD card or TTF font files embedded in the program.
 
 ![image](https://github.com/takkaO/M5FontRender/blob/images/sample.jpg?raw=true)
 
@@ -10,10 +11,10 @@ TTF font render support for M5Stack / M5Core2 with Arduino IDE.
 2. Include ```M5FontRender.h``` **AFTER include MtStack.h / M5Core2.h**.
 
 ## Sample code
-##### Load TTF from binary file
+#### Load TTF from binary TTF file
 ```c++
 #include "M5Core2.h"
-#include "binaryttf.h"
+#include "binaryttf.h" // This is font file
 #include "M5FontRender.h" // Include after M5Stack.h / M5Core2.h
 
 M5FontRender render;
@@ -23,6 +24,7 @@ void setup() {
 	M5.begin();
 	M5.Lcd.fillScreen(BLACK);
 	
+	// Load TTF from C header file
 	if (!render.loadFont(binaryttf, sizeof(binaryttf))) {
 		Serial.println("Render initialize error");
 		return;
@@ -46,7 +48,7 @@ void loop() {
 }
 ```
 
-##### Load TTF from SD card
+#### Load TTF from SD card
 ```c++
 #include "M5Core2.h"
 #include "M5FontRender.h" // Include after M5Stack.h / M5Core2.h
@@ -58,6 +60,7 @@ void setup() {
 	M5.begin();
 	M5.Lcd.fillScreen(BLACK);
 	
+	// Load TTF from microSD card
 	if (!render.loadFont("/JKG-M_3.ttf")) {
 		Serial.println("Render initialize error");
 		return;
@@ -80,6 +83,20 @@ void loop() {
 
 }
 ```
+
+## How to create binary TTF file
+We use [binary2ttf.py](https://github.com/takkaO/M5FontRender/tree/master/tools/ttf2bin) in tools directory to create binary TTF font file.  
+The ```binary2ttf.py``` is provided in the [M5EPD](https://github.com/m5stack/M5EPD/tree/main/tools/ttf2bin) library.
+The same program is included in ```tools``` directory in this repo.  
+You only execute below command.
+
+```sh
+python3 binary2ttf.py your_font_file.ttf
+```
+
+## Reduce TTF font size
+By deleting unnecessary characters in a TTF font file, you can reduce the size of the TTF font file.  
+I used [「サブセットフォントメーカー」](https://opentype.jp/subsetfontmk.htm) to reduce TTF font size. (I'm sorry. I was not able to find English lang software.)
 
 ## Note
 We have used below font file for the sample program.  
