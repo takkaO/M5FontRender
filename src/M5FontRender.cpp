@@ -10,7 +10,7 @@ M5FontRender::M5FontRender() {
     #endif
     _font_size = 44;
 
-    // Somehow height and width are reversed 
+    // Somehow height and width are reversed
     _width = M5.Lcd.height();
     _height = M5.Lcd.width();
 }
@@ -43,8 +43,13 @@ bool M5FontRender::loadFont(const char *path) {
     if (font_render_init(&_font_render, &_font_face, _font_size, _font_cache_size) != ESP_OK) {
         return false;
     }
-    
+
     return true;
+}
+
+void M5FontRender::unloadFont() {
+    font_face_destroy(&_font_face);
+    font_render_destroy(&_font_render);
 }
 
 bool M5FontRender::setFontCacheSize(unsigned int font_cache_size) {
@@ -61,9 +66,22 @@ void M5FontRender::setTextColor(uint16_t font_color) {
     _font_color = font_color;
 }
 
+void M5FontRender::setTextColor(uint16_t font_color, uint16_t font_bgcolor) {
+    _font_color   = font_color;
+    _font_bgcolor = font_bgcolor;
+}
+
 void M5FontRender::setCursor(uint32_t posX, uint32_t posY) {
     _posX = posX;
     _posY = posY;
+}
+
+int16_t M5FontRender::getCursorX(void) {
+    return _posX;
+}
+
+int16_t M5FontRender::getCursorY(void) {
+    return _posY;
 }
 
 void M5FontRender::seekCursor(int deltaX, int deltaY) {
@@ -76,11 +94,11 @@ void M5FontRender::enableAutoNewline(bool enable) {
 }
 
 void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint16_t fg) {
-    drawString(string, poX, poY, fg, &_font_render);
+    drawString(string, poX, poY, fg, _font_bgcolor, &_font_render);
 }
 
 void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY) {
-    drawString(string, poX, poY, _font_color, &_font_render);
+    drawString(string, poX, poY, _font_color, _font_bgcolor, &_font_render);
 }
 
 void M5FontRender::printf(const char* fmt, ...) {
@@ -102,15 +120,15 @@ bool M5FontRender::initializeRender() {
     if(font_render_init(&_font_render, &_font_face, _font_size, _font_cache_size) != ESP_OK) {
         return false;
     }
-    return true;    
+    return true;
 }
 
-void M5FontRender::drawFreetypeBitmap(int32_t cx, int32_t cy, uint16_t bw, uint16_t bh, uint16_t fg, uint8_t *bitmap)
+void M5FontRender::drawFreetypeBitmap(int32_t cx, int32_t cy, uint16_t bw, uint16_t bh, uint16_t fg, uint16_t bg, uint8_t *bitmap)
 {
     const uint8_t alphamap[16] = {0, 17, 34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, 255};
     M5.Lcd.startWrite();
     uint32_t pos = 0;
-    uint16_t bg = 0;
+//    uint16_t bg = 0;
     for (int y = 0; y < bh; y++) {
         for (int x = 0; x < bw; x++) {
             if (pos & 0x1) {
@@ -149,7 +167,7 @@ uint16_t M5FontRender::decodeUTF8(uint8_t *buf, uint16_t *index, uint16_t remain
     return c; // fall-back to extended ASCII
 }
 
-void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint16_t fg, font_render_t *render)
+void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint16_t fg, uint16_t bg, font_render_t *render)
 {
     int16_t sumX = 0;
     uint16_t len = strlen(string);
@@ -158,7 +176,7 @@ void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint
 
     while (n < len) {
         uint16_t uniCode = decodeUTF8((uint8_t *)string, &n, len - n);
-        
+
         if (uniCode == 	0x000A || uniCode == 0x000D) {
             // LF or CR
             poX = 0;
@@ -175,7 +193,8 @@ void M5FontRender::drawString(const char *string, int32_t poX, int32_t poY, uint
             poX = 0;
             base_y += render->max_pixel_height;
         }
-        drawFreetypeBitmap(poX + render->bitmap_left, base_y - render->bitmap_top, render->bitmap_width, render->bitmap_height, fg, render->bitmap);
+        drawFreetypeBitmap(poX + render->bitmap_left, base_y - render->bitmap_top, render->bitmap_width, render->bitmap_height,
+        fg, bg, render->bitmap);
         poX += render->advance;
         sumX += render->advance;
     }
