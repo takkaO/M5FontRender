@@ -1,5 +1,7 @@
 #include "ffsupport.h"
 
+#ifdef ESP_PLATFORM
+
 fileclass_t fileclass;
 fs::FS &fontFS = SD;
 
@@ -33,3 +35,5 @@ long int ffsupport_ftell(fileclass_t *stream)
 {
     return stream->_fstream.position();
 }
+
+#endif

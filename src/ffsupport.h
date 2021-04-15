@@ -1,6 +1,7 @@
 #ifndef __FFSUPPORT_H
 #define __FFSUPPORT_H
 
+#ifdef ESP_PLATFORM
 #include "SD.h"
 #include "SPIFFS.h"
 
@@ -24,5 +25,7 @@ void  ffsupport_fclose(fileclass_t *stream);
 size_t  ffsupport_fread(void *ptr, size_t size, size_t nmemb, fileclass_t *stream);
 int  ffsupport_fseek(fileclass_t *stream, long int offset, int whence);
 long int  ffsupport_ftell(fileclass_t *stream);
+
+#endif
 
 #endif
