@@ -1,5 +1,12 @@
 # M5 Font Render
 
+## 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+### 🚨 Now we have released a better library !
+### 🚨 We recommend you to use [Open Font Render](https://github.com/takkaO/OpenFontRender) !
+
+## 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
 TTF font render support for M5Stack / M5Core2 with Arduino IDE.  
 This library can render TTF font files in the SD card or TTF font files embedded in the program.
 
